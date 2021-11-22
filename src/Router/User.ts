@@ -27,4 +27,17 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await DB.User.set(id, req.body);
+    res.status(204);
+    res.end();
+  }
+  catch(error) {
+    res.status(404);
+    res.end();
+  }
+});
+
 export default router;

@@ -45,6 +45,19 @@ paths:
           description: Invalid ID
         404:
           description: User does not exist
+    put:
+      summary: Updates a user object
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: string
+      responses:
+        204:
+          description: Update was successful
+        404:
+          description: User does not exist
   /lobbies:
     post:
       summary: Creates a new lobby

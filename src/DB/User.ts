@@ -37,3 +37,16 @@ export const get = async (id: string) => {
     return null;
   }
 }
+
+export const set = async (id: string, user: User) => {
+  const next = {
+    nickname: user.nickname
+  };
+
+  const filter = {
+    _id: new ObjectId(id)
+  };
+
+  await (await collection())
+    .updateOne(filter, { $set: next });
+}

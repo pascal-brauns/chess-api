@@ -124,7 +124,7 @@ router.put('/:id/members/:user/ready', async (req, res) => {
     await DB.Lobby.toggleReady(user, id);
     const lobby = await DB.Lobby.get(id);
     IO.emit(`${id}:lobby`, Pure.External.lobby(lobby));
-    if (lobby.members.length === 2 && lobby.members.every(member => member.ready)) {
+    if (Pure.Lobby.complete(lobby)) {
       const game = await DB.Game.create(lobby);
       IO.emit(`${game._id}:game`, Pure.External.game(game));
       await DB.Lobby.remove(lobby._id);
