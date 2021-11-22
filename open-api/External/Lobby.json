@@ -1,0 +1,53 @@
+{
+  "additionalProperties": false,
+  "type": "object",
+  "properties": {
+    "_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "members": {
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "nickname": {
+            "type": "string"
+          },
+          "color": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "white"
+                ]
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "black"
+                ]
+              }
+            ]
+          },
+          "ready": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "nickname",
+          "color",
+          "ready"
+        ]
+      }
+    }
+  },
+  "required": [
+    "_id",
+    "name",
+    "members"
+  ]
+}

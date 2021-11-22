@@ -1,0 +1,272 @@
+openapi: 3.0.2
+info:
+  title: chess-api
+  description: API for match-making chess games
+  version: 1.0.0
+
+paths:
+  /users:
+    post:
+      summary: Creates a new user
+      description: Takes a nickname to create a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nickname:
+                  type: string
+      responses:
+        200:
+          description: Contains newly created user object
+          content:
+            application/json:
+              schema:
+                $ref: "./open-api/User.json"
+  /users/{id}:
+    get:
+      summary: Retrieves a user object
+      description: Retrieves a user object by ID
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Contains user object
+          content:
+            application/json:
+              schema:
+                $ref: "./open-api/User.json"
+        400:
+          description: Invalid ID
+        404:
+          description: User does not exist
+  /lobbies:
+    post:
+      summary: Creates a new lobby
+      description: Creates a new lobby using a user object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "./open-api/User.json"
+      responses:
+        200:
+          description: Contains newly created lobby object
+          content:
+            application/json:
+              schema:
+                $ref: "./open-api/External/Lobby.json"
+        404:
+          description: User does not exist
+    get:
+      summary: Retrieves all lobbies
+      responses:
+        200:
+          description: Contains lobby objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./open-api/External/Lobby.json"
+  /lobbies/{id}:
+    get:
+      summary: Retrieves a lobby object
+      description: Retrieves a lobby object by ID
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Contains lobby object
+          content:
+            application/json:
+              schema:
+                $ref: "./open-api/External/Lobby.json"
+        404:
+          description: Lobby does not exist
+  /lobbies/{id}/members/{user}/color:
+    get:
+      summary: Retrieves the color of a lobby member
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: string
+        - in: path
+          required: true
+          name: user
+          schema:
+            type: string
+      responses:
+        200:
+          description: Contains color of lobby member
+          content:
+            application/json:
+              schema:
+                type: string
+        404:
+          description: User does not exist
+  /lobbies/{id}/members/{user}/join:
+    post:
+      summary: Adds a member to a lobby
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: string
+        - in: path
+          required: true
+          name: user
+          schema:
+            type: string
+      responses:
+        204:
+          description: Update was successful
+        404:
+          description: User or lobby does not exist
+  /lobbies/{id}/members/{user}/leave:
+    delete:
+      summary: Removes a member from a lobby
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: string
+        - in: path
+          required: true
+          name: user
+          schema:
+            type: string
+      responses:
+        204:
+          description: Update was successful
+        404:
+          description: User or lobby does not exist
+  /lobbies/{id}/members/{user}/color/{color}:
+    put:
+      summary: Changes the color of a lobby member
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: string
+        - in: path
+          required: true
+          name: user
+          schema:
+            type: string
+        - in: path
+          required: true
+          name: color
+          schema:
+            type: string
+      responses:
+        204:
+          description: Update was successful
+        400:
+          description: Passed color is invalid
+        404:
+          description: User or lobby does not exist
+  /lobbies/{id}/member/{user}/ready:
+    put:
+      summary: Changes the ready state of a lobby member
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: string
+        - in: path
+          required: true
+          name: user
+          schema:
+            type: string
+      responses:
+        204:
+          description: Update was successful
+        404:
+          description: User or lobby does not exist
+  /games/{id}:
+    get:
+      summary: Retrieves a game by ID
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Contains game object
+          content:
+            application/json:
+              schema:
+                $ref: "./open-api/External/Game.json"
+        404:
+          description: Game does not exist
+  /games/{id}/player/{user}/color:
+    get:
+      summary: Retrieves a game by ID
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: string
+        - in: path
+          required: true
+          name: user
+          schema:
+            type: string
+      responses:
+        200:
+          description: Contains player color
+          content:
+            application/json:
+              schema:
+                type: string
+        404:
+          description: Game or user does not exist
+  /games/{id}/player/{user}/action:
+    post:
+      summary: Dispatches a placement action to a game
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: string
+        - in: path
+          required: true
+          name: user
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "./open-api/Placement.json"
+      responses:
+        200:
+          description: Contains updated game
+          content:
+            application/json:
+              schema:
+                $ref: "./open-api/External/Game.json"
+        404:
+          description: Game or user does not exist
+        401:
+          description: Invalid placement

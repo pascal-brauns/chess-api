@@ -1,0 +1,7 @@
+coverage
+.eslintrc
+.git*
+Dockerfile
+jest.config.ts
+tsconfig.json
+src

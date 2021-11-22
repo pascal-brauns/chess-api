@@ -1,0 +1,16 @@
+{
+  "additionalProperties": false,
+  "type": "object",
+  "properties": {
+    "_id": {
+      "type": "string"
+    },
+    "nickname": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "_id",
+    "nickname"
+  ]
+}
