@@ -16,7 +16,7 @@ const main = async () => {
     case 'serve': {
       const port = process.env.PORT;
       const app = express();
-      app.use(morgan('dev'));
+      app.use(morgan('tiny'));
       app.use(json({ strict: false }));
       app.get('/ping', (_, res) => res.send('pong'));
       app.use(express.static(path.resolve(process.env.STATIC_ROOT)));
