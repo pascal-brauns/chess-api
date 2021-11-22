@@ -10,7 +10,10 @@ router.post('/', async (req, res) => {
   const user = await DB.User.get(req.body._id);
   if (user) {
     const lobby = await DB.Lobby.create(user);
-    IO.emit('lobbies', (await DB.Lobby.all()).map(Pure.External.lobby));
+    IO.emit(
+      'lobbies', 
+      (await DB.Lobby.all()).map(Pure.External.lobby)
+    );
     IO.emit(`${lobby._id}:lobby`, Pure.External.lobby(lobby));
     res.json(Pure.External.lobby(lobby));
   }
@@ -20,9 +23,10 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', async (_, res) => {
-  res.json((await DB.Lobby.all()).map(Pure.External.lobby));
-});
+router.get('/', async (_, res) => res.json(
+  (await DB.Lobby.all())
+    .map(Pure.External.lobby)
+));
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
@@ -71,8 +75,13 @@ router.delete('/:id/members/:user/leave', async (req, res) => {
   const lobby = await DB.Lobby.get(id);
   const user = await DB.User.get(req.params.user);
   if (lobby && user) {
-    await DB.Lobby.leave(user, id);
-    IO.emit(`${id}:lobby`, Pure.External.lobby(await DB.Lobby.get(id)));
+    const lobby = await DB.Lobby.leave(user, id);
+    if (lobby) {
+      IO.emit(`${id}:lobby`, Pure.External.lobby(await DB.Lobby.get(id)));
+    }
+    else {
+      IO.emit('lobbies', (await DB.Lobby.all()).map(Pure.External.lobby));
+    }
     res.status(204);
     res.end();
   }

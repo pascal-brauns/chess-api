@@ -75,11 +75,13 @@ export const leave = async (user: User, id: string) => {
   const lobby = await get(id);
   if (lobby.members.length === 1) {
     await remove(id);
+    return null;
   }
   else {
     const member = lobby.members.findIndex(member => member._id === user._id);
     lobby.members.splice(member, 1);
     await set(id, lobby);
+    return get(id);
   }
 }
 
@@ -105,7 +107,11 @@ export const join = async (user: User, id: string): Promise<void> => {
 
 export const get = async (id: string): Promise<Lobby> => {
   const lobby = await (await collection()).findOne({ _id: new ObjectId(id) });
-  return internal(lobby);
+  return (
+    lobby
+      ? internal(lobby)
+      : null
+  );
 };
 
 const set = async (id: string, next: Lobby) => (
