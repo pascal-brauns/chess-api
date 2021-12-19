@@ -7,6 +7,7 @@
     "start": "nodemon build serve",
     "build": "tsc && tsc-alias",
     "build:watch": "tsc-watch --onSuccess tsc-alias",
+    "build:docker": "docker build -t chess-api:$npm_package_version .",
     "lint": "eslint . --ext .ts",
     "test": "echo jest",
     "generate-schemas": "node build generate-openapi-schemas",
