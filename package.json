@@ -9,8 +9,8 @@
     "build:watch": "tsc-watch --onSuccess tsc-alias",
     "lint": "eslint . --ext .ts",
     "test": "echo jest",
-    "generate-openapi-schemas": "node build generate-openapi-schemas",
-    "generate-openapi-bundle": "npm run generate-openapi-schemas && swagger-cli bundle --t yaml --dereference --o api-bundle.yaml api.yaml"
+    "generate-schemas": "node build generate-openapi-schemas",
+    "generate-specification": "npm run generate-schemas && swagger-cli bundle --t yaml --dereference --o specification.yaml api.yaml"
   },
   "keywords": [
     "chess"
